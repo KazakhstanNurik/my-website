@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музыка и сердечки</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background-color: red;
+            color: white;
+            border-radius: 10px;
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            animation: fade 2s linear infinite;
+        }
+        @keyframes fade {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Выбери музыку и нажми кнопку!</h1>
+    <input type="file" id="fileInput" accept="audio/*">
+    <br><br>
+    <button onclick="startMagic()">Запустить</button>
+    <audio id="music" controls></audio>
+
+    <script>
+        let music = document.getElementById("music");
+
+        // При выборе файла загружаем его в плеер
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let url = URL.createObjectURL(file);
+                music.src = url;
+            }
+        });
+
+        function startMagic() {
+            if (!music.src) {
+                alert("Сначала выбери файл с музыкой!");
+                return;
+            }
+            music.play(); // Запуск музыки
+
+            setInterval(() => {
+                let heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤️";
+                document.body.appendChild(heart);
+
+                let x = Math.random() * window.innerWidth;
+                let y = Math.random() * window.innerHeight;
+
+                heart.style.left = x + "px";
+                heart.style.top = y + "px";
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
